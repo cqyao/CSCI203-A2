@@ -6,46 +6,50 @@ public class Queue {
 
     public Queue(int sizeOfArray) {
         queue = new int[sizeOfArray];
-        rear = -1;
-        front = -1;
+        rear = 0;
+        front = 0;
         size = 0;
     }
 
     public boolean isEmpty() { // Checks if the queue is empty and returns true or false.
-        boolean response = false;
-        if(size == 0) {
-            response = true;
-        }
-        return response;
+        return size==0;
     }
 
-    public boolean enqueue(int element) { //Method for enqueueing elements into Queue
-        boolean response = false;
-        if(rear != queue.length - 1) {
-            rear++;
+    public boolean isFull() {
+        return size==60;
+    }
+
+    public void enqueue(int element) { //Method for queueing elements into Queue
+        if(!isFull()) {
             queue[rear] = element;
+            rear = (rear + 1) % 60;
             size++;
-            response = true;
         }
-        return response;
+        else {
+            System.out.println("Queue is full");
+        }
     }
 
-    public int dequeue() { // Method for dequeueing front element
-        int response = 0;
-        if(size != 0) {
-            front++;
-            response = queue[front];
+    public void dequeue() { // Method for dequeueing front element
+        if(!isEmpty()) {
+            int data = queue[front];
+            front = (front + 1) % 60;
             size--;
         }
-        return response;
+        else {
+            System.out.println("Queue is empty");
+        }
     }
 
-    public int front() { // Returns element at front
-        int response = 0;
-        if(!isEmpty()) {
-            response = queue[front + 1];
+    public void printQueue() {
+        for(int i=0; i<size; i++)
+        {
+            System.out.println(queue[(front+i)%getSize()]);
         }
-        return response;
+    }
+
+    public int getFront() { // Returns element at front
+        return queue[front];
     }
 
     public int getSize() {  // Returns size of queue
