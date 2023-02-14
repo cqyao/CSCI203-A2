@@ -1,34 +1,41 @@
 import java.util.Random;
-
 public class Main {
-    static Queue receiveQueue = new Queue(60);
-
     public static void main(String[] args) {
-
         Random rand = new Random();
-        // Queue emails at avg of 30 per min. Using rng of about 50% out of 60 loops
-        for (int i = 0; i <= 60; i++) {                         // Loop running from 0 to 60 times
-            int result = rand.nextInt(61 - 1);           // Random number from 1 to 60
-            if (result % 2 == 0) {                              // If random number is even, enqueue.
-                receiveQueue.enqueue(result);
+        Queue myQueue = new Queue(1000);
+
+// 1. Simulate the arrival of eMails
+        // Randomly generate a number between 0 and 60.
+        int numOfAdd = rand.nextInt(61);
+
+        // Push x number of email into the queue Q
+        for (int i = 0; i <= numOfAdd; i++) {
+            myQueue.enqueue(i);
+        }
+
+//        System.out.println("before: ");
+//        myQueue.printQ();
+
+// 2. Simulate the processing of eMails
+        // Generate and mark 25% of eMails that fail to send.
+        final int numOfDQ = myQueue.size();
+        for (int i = 0; i <= numOfDQ; i++) {
+            int numOfFail = (int) Math.ceil(rand.nextInt(5));
+            if (numOfFail==1) {
+                int temp = myQueue.front(); // Assign temp variable to front element
+                      // Enqueue the temp element
+                myQueue.dequeue();          // Dequeue front element
+                myQueue.enqueue(temp);
+            }
+            else {
+                myQueue.dequeue();          // Dequeue front element
             }
         }
-        System.out.println("before: ");
-        receiveQueue.printQueue();
 
-
-        for (int i = 0; i <= receiveQueue.getSize(); i++) {     // Loop running from 0 until counter <= Q size.
-            int result = rand.nextInt(5 - 1);            // Random number from 1 to 4
-            if (result == 1 || result == 2 || result == 3) {    // If random number equals to 1, 2, or 3...
-                receiveQueue.dequeue();                         // ... Then dequeue the front.
-            }else{                                              // If not,
-                int reQueue = receiveQueue.getFront();          // Temp assign front element to a variable
-                receiveQueue.enqueue(reQueue);                  // Enqueue the front element
-                receiveQueue.dequeue();                         // Then dequeue the front element
-            }
-        }
+        myQueue.enqueue(55);
         System.out.println("after: ");
-        receiveQueue.printQueue();
+        myQueue.printQ();
+        System.out.println("____");
+        System.out.println(Integer.toString(myQueue.size()));
     }
 }
-
